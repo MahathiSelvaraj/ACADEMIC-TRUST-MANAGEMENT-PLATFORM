@@ -3,27 +3,102 @@
 {% block content %}
 <section class="home-hero">
     <div class="home-hero-text">
-        <p class="home-chip">Smart Academic Verification</p>
+        <p class="home-chip">Academic Record Verification System</p>
         <h2>Academic Trust Management Platform</h2>
-        <p>Securely upload your academic records and track admin verification status with confidence.</p>
+        <p class="home-lead">
+            A professional platform for secure academic document submission, transparent verification,
+            and trusted record sharing between students, institutions, and administrators.
+        </p>
+        <div class="hero-points">
+            <span>Role-based access control</span>
+            <span>Secure document handling</span>
+            <span>Verification workflow tracking</span>
+        </div>
         <div class="actions home-actions">
             <a class="btn primary" href="{{ url_for('register') }}">Create Account</a>
             <a class="btn home-btn-outline" href="{{ url_for('login') }}">Login</a>
         </div>
     </div>
     <div class="home-hero-image-wrap">
-        <img class="home-hero-image" src="{{ url_for('static', filename='images/academic-hero.svg') }}" alt="Academic trust illustration">
+        <div class="hero-showcase">
+            <div class="showcase-header">
+                <p>System Overview</p>
+                <span>Live workflow</span>
+            </div>
+            <img class="home-hero-image" src="{{ url_for('static', filename='images/academic-hero.svg') }}" alt="Academic trust illustration">
+            <div class="showcase-stats">
+                <article>
+                    <strong>3</strong>
+                    <span>User Roles</span>
+                </article>
+                <article>
+                    <strong>100%</strong>
+                    <span>Status Visibility</span>
+                </article>
+                <article>
+                    <strong>24/7</strong>
+                    <span>Access to Records</span>
+                </article>
+            </div>
+        </div>
     </div>
 </section>
 
-<section class="grid-2 info-grid">
+<section class="home-summary">
+    <article class="summary-card">
+        <span>Project Focus</span>
+        <h3>Digitizing academic trust and verification</h3>
+        <p>
+            The platform reduces manual verification effort by organizing uploads, approval flow,
+            and access control in one centralized system.
+        </p>
+    </article>
+    <article class="summary-card">
+        <span>Core Workflow</span>
+        <h3>Upload, review, verify, and share</h3>
+        <p>
+            Students upload records, admins validate them, and institutions can access only approved
+            and verified documents through a controlled request flow.
+        </p>
+    </article>
+</section>
+
+<section class="role-grid">
     <article class="card info-card student-card">
         <h3>For Students</h3>
-        <p>Upload documents with institution details and view verification progress anytime.</p>
+        <p>Upload academic documents, monitor verification status, and manage institution requests securely.</p>
+    </article>
+    <article class="card info-card institution-card">
+        <h3>For Institutions</h3>
+        <p>Send verification requests and access approved, verified student documents in a controlled manner.</p>
     </article>
     <article class="card info-card admin-card">
         <h3>For Admin</h3>
-        <p>Review uploaded records, verify authenticity, and provide transparent updates.</p>
+        <p>Review uploaded records, update verification decisions, monitor requests, and analyze platform activity.</p>
     </article>
+</section>
+
+<section class="home-process card">
+    <div class="section-heading">
+        <p class="section-kicker">Verification Flow</p>
+        <h3>How the platform works</h3>
+    </div>
+    <div class="process-grid">
+        <article>
+            <strong>01</strong>
+            <h4>Student Upload</h4>
+            <p>Academic records are submitted with file validation and structured metadata.</p>
+        </article>
+        <article>
+            <strong>02</strong>
+            <h4>Admin Review</h4>
+            <p>Administrators verify authenticity, update status, and record review notes.</p>
+        </article>
+        <article>
+            <strong>03</strong>
+            <h4>Institution Access</h4>
+            <p>Institutions receive access only after student approval and admin confirmation.</p>
+        </article>
+    </div>
 </section>
 {% endblock %}
