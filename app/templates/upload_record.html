@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Upload Record | Academic Trust Platform{% endblock %}
+{% block content %}
+<section class="card form-card">
+    <h2>Upload Academic Record</h2>
+    <form method="POST" enctype="multipart/form-data" class="form-grid">
+        <label for="document_title">Document Title</label>
+        <input id="document_title" name="document_title" type="text" required>
+
+        <label for="institution">Institution Name</label>
+        <input id="institution" name="institution" type="text" required>
+
+        <label for="year_of_completion">Year of Completion</label>
+        <input id="year_of_completion" name="year_of_completion" type="number" min="1950" max="2100" required>
+
+        <label for="description">Description (Optional)</label>
+        <textarea id="description" name="description" rows="3"></textarea>
+
+        <label for="document">Upload File</label>
+        <input id="document" name="document" type="file" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx" required>
+
+        <button class="btn primary" type="submit">Submit Record</button>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Notifications | Academic Trust Platform{% endblock %}
+{% block content %}
+<section class="card">
+    <h2>Notifications</h2>
+    <p>Latest verification-related updates.</p>
+    <form method="POST" action="{{ url_for('mark_all_notifications') }}" class="row-between">
+        <button class="btn small primary" type="submit" name="action" value="read">Mark All as Read</button>
+        <button class="btn small" type="submit" name="action" value="unread">Mark All as Unread</button>
+    </form>
+</section>
+
+<section class="card table-card">
+    {% if notifications %}
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Message</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in notifications %}
+                <tr class="{% if not item.is_read %}unread-row{% endif %}">
+                    <td>{{ item.message }}</td>
+                    <td>{{ item.created_at|timeago }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No notifications yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

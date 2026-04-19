@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | Academic Trust Platform{% endblock %}
+{% block content %}
+<section class="card">
+    <div class="row-between">
+        <h2>Welcome, {{ session.get('name') }}</h2>
+        <a class="btn primary" href="{{ url_for('upload_record') }}">Upload New Record</a>
+    </div>
+    <p>Track all submitted academic documents and their verification status below.</p>
+</section>
+
+<section class="card table-card">
+    <h3>Your Uploaded Records</h3>
+    {% if records %}
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Institution</th>
+                    <th>Year</th>
+                    <th>File</th>
+                    <th>Status</th>
+                    <th>Admin Note</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td>
+                        {{ record.document_title }}
+                        {% if record.is_duplicate %}
+                        <span class="badge badge-duplicate">Duplicate</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ record.institution }}</td>
+                    <td>{{ record.year_of_completion }}</td>
+                    <td><a href="{{ url_for('serve_uploaded_file', record_id=record.id) }}" target="_blank">View</a></td>
+                    <td><span class="badge badge-{{ record.status|lower }}">{{ record.status }}</span></td>
+                    <td>{{ record.admin_note or '-' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No records uploaded yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

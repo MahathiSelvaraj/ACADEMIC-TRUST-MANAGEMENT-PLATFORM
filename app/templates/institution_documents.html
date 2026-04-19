@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Verified Student Documents | Academic Trust Platform{% endblock %}
+{% block content %}
+<section class="card">
+    <h2>Verified Documents - {{ student.name if student else "Student" }}</h2>
+    <p>Institutions can view only verified records after student approval and admin confirmation.</p>
+</section>
+
+<section class="card table-card">
+    {% if records %}
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Institution</th>
+                    <th>Year</th>
+                    <th>File</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td>{{ record.document_title }}</td>
+                    <td>{{ record.institution }}</td>
+                    <td>{{ record.year_of_completion }}</td>
+                    <td><a href="{{ url_for('serve_uploaded_file', record_id=record.id) }}" target="_blank">View</a></td>
+                    <td><span class="badge badge-verified">{{ record.status }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No verified records found for this student.</p>
+    {% endif %}
+</section>
+{% endblock %}

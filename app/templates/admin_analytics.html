@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Admin Analytics | Academic Trust Platform{% endblock %}
+{% block content %}
+<section class="card">
+    <h2>Analytics Dashboard</h2>
+    <p>Overview of uploads, verification progress, and monthly trends.</p>
+</section>
+
+<section class="grid-2">
+    <article class="card">
+        <h3>Total Uploads</h3>
+        <p class="metric">{{ metrics.total_uploads }}</p>
+    </article>
+    <article class="card">
+        <h3>Total Users</h3>
+        <p class="metric">{{ metrics.total_users }}</p>
+    </article>
+    <article class="card">
+        <h3>Verified</h3>
+        <p class="metric">{{ metrics.total_verified }} ({{ metrics.verified_percent }}%)</p>
+    </article>
+    <article class="card">
+        <h3>Pending / Rejected</h3>
+        <p class="metric">{{ metrics.total_pending }} / {{ metrics.total_rejected }}</p>
+    </article>
+</section>
+
+<section class="card">
+    <h3>Status Breakdown</h3>
+    <div class="status-list">
+        <p>Pending: {{ status_breakdown.get("Pending", 0) }}</p>
+        <p>Verified: {{ status_breakdown.get("Verified", 0) }}</p>
+        <p>Rejected: {{ status_breakdown.get("Rejected", 0) }}</p>
+    </div>
+</section>
+
+<section class="card table-card">
+    <h3>Monthly Upload Trend</h3>
+    {% if monthly_labels %}
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Month</th>
+                    <th>Uploads</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(monthly_labels|length) %}
+                <tr>
+                    <td>{{ monthly_labels[i] }}</td>
+                    <td>{{ monthly_counts[i] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No upload data yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

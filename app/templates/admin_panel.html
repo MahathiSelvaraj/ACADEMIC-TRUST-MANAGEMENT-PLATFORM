@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block title %}Admin Panel | Academic Trust Platform{% endblock %}
+{% block content %}
+<section class="card">
+    <h2>Admin Verification Panel</h2>
+    <p>Review all submitted documents and update their verification status.</p>
+</section>
+
+<section class="card">
+    <h3>Search and Filter</h3>
+    <form method="GET" action="{{ url_for('admin_panel') }}" class="form-grid">
+        <label for="q">Search (name, email, title, institution)</label>
+        <input id="q" name="q" type="text" value="{{ filters.q }}" placeholder="Enter keyword">
+
+        <label for="status">Status</label>
+        <select id="status" name="status">
+            <option value="">All Statuses</option>
+            <option value="Pending" {% if filters.status == 'Pending' %}selected{% endif %}>Pending</option>
+            <option value="Verified" {% if filters.status == 'Verified' %}selected{% endif %}>Verified</option>
+            <option value="Rejected" {% if filters.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+        </select>
+
+        <label for="institution">Institution</label>
+        <select id="institution" name="institution">
+            <option value="">All Institutions</option>
+            {% for item in institutions %}
+            <option value="{{ item }}" {% if filters.institution == item %}selected{% endif %}>{{ item }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="year">Year</label>
+        <select id="year" name="year">
+            <option value="">All Years</option>
+            {% for item in years %}
+            <option value="{{ item }}" {% if filters.year == item %}selected{% endif %}>{{ item }}</option>
+            {% endfor %}
+        </select>
+
+        <div class="row-between">
+            <button class="btn primary" type="submit">Apply Filters</button>
+            <a class="btn" href="{{ url_for('admin_panel') }}">Clear</a>
+        </div>
+    </form>
+</section>
+
+<section class="card table-card">
+    {% if records %}
+    <form id="bulk-action-form" method="POST" action="{{ url_for('bulk_update_records') }}" class="inline-form">
+        <input type="hidden" name="filter_q" value="{{ filters.q }}">
+        <input type="hidden" name="filter_status" value="{{ filters.status }}">
+        <input type="hidden" name="filter_institution" value="{{ filters.institution }}">
+        <input type="hidden" name="filter_year" value="{{ filters.year }}">
+        <label for="bulk_status">Bulk Status</label>
+        <select id="bulk_status" name="bulk_status" required>
+            <option value="">Select status</option>
+            <option value="Pending">Pending</option>
+            <option value="Verified">Verified</option>
+            <option value="Rejected">Rejected</option>
+        </select>
+        <label for="bulk_note">Bulk Note (Optional)</label>
+        <input id="bulk_note" name="bulk_note" type="text" placeholder="Reason for bulk action">
+        <button class="btn primary" type="submit">Apply to Selected</button>
+        <p class="helper-text" id="selected-count">0 record selected</p>
+    </form>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <input id="select-all-records" type="checkbox" title="Select all">
+                    </th>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Title</th>
+                    <th>Institution</th>
+                    <th>Year</th>
+                    <th>File</th>
+                    <th>Status</th>
+                    <th>Update</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td>
+                        <input
+                            class="record-checkbox"
+                            type="checkbox"
+                            name="record_ids"
+                            value="{{ record.id }}"
+                            form="bulk-action-form"
+                        >
+                    </td>
+                    <td>{{ record.user.name }}</td>
+                    <td>{{ record.user.email }}</td>
+                    <td>{{ record.document_title }}</td>
+                    <td>{{ record.institution }}</td>
+                    <td>{{ record.year_of_completion }}</td>
+                    <td><a href="{{ url_for('serve_uploaded_file', record_id=record.id) }}" target="_blank">View</a></td>
+                    <td><span class="badge badge-{{ record.status|lower }}">{{ record.status }}</span></td>
+                    <td>
+                        <form method="POST" action="{{ url_for('verify_record', record_id=record.id) }}" class="inline-form">
+                            <input type="hidden" name="filter_q" value="{{ filters.q }}">
+                            <input type="hidden" name="filter_status" value="{{ filters.status }}">
+                            <input type="hidden" name="filter_institution" value="{{ filters.institution }}">
+                            <input type="hidden" name="filter_year" value="{{ filters.year }}">
+                            <select name="status">
+                                <option value="Pending" {% if record.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                <option value="Verified" {% if record.status == 'Verified' %}selected{% endif %}>Verified</option>
+                                <option value="Rejected" {% if record.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+                            </select>
+                            <input type="text" name="admin_note" placeholder="Note (optional)" value="{{ record.admin_note or '' }}">
+                            <button class="btn small" type="submit">Save</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No records submitted yet.</p>
+    {% endif %}
+</section>
+
+{% endblock %}

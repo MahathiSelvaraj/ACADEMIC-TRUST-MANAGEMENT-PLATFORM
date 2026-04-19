@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Home | Academic Trust Platform{% endblock %}
+{% block content %}
+<section class="home-hero">
+    <div class="home-hero-text">
+        <p class="home-chip">Smart Academic Verification</p>
+        <h2>Academic Trust Management Platform</h2>
+        <p>Securely upload your academic records and track admin verification status with confidence.</p>
+        <div class="actions home-actions">
+            <a class="btn primary" href="{{ url_for('register') }}">Create Account</a>
+            <a class="btn home-btn-outline" href="{{ url_for('login') }}">Login</a>
+        </div>
+    </div>
+    <div class="home-hero-image-wrap">
+        <img class="home-hero-image" src="{{ url_for('static', filename='images/academic-hero.svg') }}" alt="Academic trust illustration">
+    </div>
+</section>
+
+<section class="grid-2 info-grid">
+    <article class="card info-card student-card">
+        <h3>For Students</h3>
+        <p>Upload documents with institution details and view verification progress anytime.</p>
+    </article>
+    <article class="card info-card admin-card">
+        <h3>For Admin</h3>
+        <p>Review uploaded records, verify authenticity, and provide transparent updates.</p>
+    </article>
+</section>
+{% endblock %}

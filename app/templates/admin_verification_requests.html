@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Admin Request Confirmation | Academic Trust Platform{% endblock %}
+{% block content %}
+<section class="card">
+    <h2>Admin Confirmation - Institution Requests</h2>
+    <p>Confirm student-approved requests before institutions can access verified documents.</p>
+</section>
+
+<section class="card table-card">
+    {% if requests %}
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Institution</th>
+                    <th>Student</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Admin Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in requests %}
+                <tr>
+                    <td>{{ req.institution.name }} ({{ req.institution.email }})</td>
+                    <td>{{ req.student.name }} ({{ req.student.email }})</td>
+                    <td><span class="badge">{{ req.status }}</span></td>
+                    <td>{{ req.request_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>
+                        {% if req.status == "StudentApproved" %}
+                        <form method="POST" action="{{ url_for('confirm_verification_request', req_id=req.id) }}" class="row-between">
+                            <button class="btn small primary" type="submit" name="action" value="confirm">Confirm</button>
+                            <button class="btn small" type="submit" name="action" value="reject">Reject</button>
+                        </form>
+                        {% else %}
+                        No action
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No requests found.</p>
+    {% endif %}
+</section>
+{% endblock %}

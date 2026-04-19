@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Institution Dashboard | Academic Trust Platform{% endblock %}
+{% block content %}
+<section class="card">
+    <h2>Institution Verification Requests</h2>
+    <p>Search student by email and send verification request.</p>
+</section>
+
+<section class="card form-card">
+    <form method="POST" class="form-grid">
+        <label for="student_email">Student Email</label>
+        <input id="student_email" name="student_email" type="email" value="{{ query_email }}" required>
+        <button class="btn primary" type="submit">Send Request</button>
+    </form>
+</section>
+
+<section class="card table-card">
+    <h3>My Requests</h3>
+    {% if requests %}
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Documents</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in requests %}
+                <tr>
+                    <td>{{ req.student.name }} ({{ req.student.email }})</td>
+                    <td><span class="badge">{{ req.status }}</span></td>
+                    <td>{{ req.request_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>
+                        {% if req.status == "AdminConfirmed" %}
+                        <a href="{{ url_for('institution_student_documents', student_id=req.student_id) }}">View Verified Docs</a>
+                        {% else %}
+                        Not available
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No requests yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

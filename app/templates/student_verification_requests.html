@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Student Requests | Academic Trust Platform{% endblock %}
+{% block content %}
+<section class="card">
+    <h2>Incoming Institution Requests</h2>
+    <p>Approve or reject institution verification access requests.</p>
+</section>
+
+<section class="card table-card">
+    {% if requests %}
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Institution</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in requests %}
+                <tr>
+                    <td>{{ req.institution.name }} ({{ req.institution.email }})</td>
+                    <td><span class="badge">{{ req.status }}</span></td>
+                    <td>{{ req.request_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>
+                        {% if req.status == "Pending" %}
+                        <form method="POST" action="{{ url_for('respond_verification_request', req_id=req.id) }}" class="row-between">
+                            <button class="btn small primary" type="submit" name="action" value="approve">Approve</button>
+                            <button class="btn small" type="submit" name="action" value="reject">Reject</button>
+                        </form>
+                        {% else %}
+                        Processed
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No incoming requests.</p>
+    {% endif %}
+</section>
+{% endblock %}
