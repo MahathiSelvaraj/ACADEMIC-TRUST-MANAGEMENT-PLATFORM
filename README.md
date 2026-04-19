@@ -63,6 +63,26 @@ MINI PROJECT/
 4. Open browser:
    - `http://127.0.0.1:5000`
 
+## Deployment Notes
+- Use environment variables in production:
+  - `SECRET_KEY` = any long random secret string
+  - `DATABASE_URL` = hosted database connection string
+- The app now supports:
+  - local SQLite by default
+  - production database URLs such as PostgreSQL
+- `Procfile` uses Gunicorn for deployment:
+  - `web: gunicorn app:app`
+- Recommended platforms:
+  - Render
+  - Railway
+  - PythonAnywhere
+
+## Example Deploy Environment Variables
+```text
+SECRET_KEY=replace-with-a-random-secret
+DATABASE_URL=postgresql://username:password@host:5432/dbname
+```
+
 ## Default Admin
 - Email: `admin@trust.com`
 - Password: `admin123`

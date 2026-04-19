@@ -30,9 +30,20 @@ ALLOWED_EXTENSIONS = {"pdf", "png", "jpg"}
 MIN_FILE_SIZE = 1024
 MAX_FILE_SIZE = 5 * 1024 * 1024
 
+
+def get_database_uri() -> str:
+    database_url = os.environ.get("DATABASE_URL")
+    if database_url:
+        # Some platforms expose postgres URLs with an older scheme.
+        if database_url.startswith("postgres://"):
+            database_url = database_url.replace("postgres://", "postgresql://", 1)
+        return database_url
+    return f"sqlite:///{os.path.join(BASE_DIR, 'instance', 'academic_trust.db')}"
+
+
 app = Flask(__name__, template_folder="app/templates", static_folder="app/static")
-app.config["SECRET_KEY"] = "change-this-secret-key"
-app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{os.path.join(BASE_DIR, 'instance', 'academic_trust.db')}"
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret-key-change-me")
+app.config["SQLALCHEMY_DATABASE_URI"] = get_database_uri()
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = MAX_FILE_SIZE
@@ -57,6 +68,8 @@ def compute_file_hash(file_storage) -> str:
 
 
 def ensure_schema_updates():
+    if db.engine.dialect.name != "sqlite":
+        return
     with db.engine.begin() as conn:
         columns = {row[1] for row in conn.execute(text("PRAGMA table_info(academic_record)"))}
         if "file_hash" not in columns:
@@ -770,7 +783,7 @@ with app.app_context():
     create_default_staff()
 
 
+
+import os
 if __name__ == "__main__":
-    import os
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))

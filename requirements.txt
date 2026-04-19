@@ -1,5 +1,7 @@
 Flask
+Flask-SQLAlchemy
 gunicorn
 SQLAlchemy
 blinker
 werkzeug
+psycopg2-binary
